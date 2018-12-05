@@ -1,9 +1,4 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
     <head>
         <title>TODO supply a title</title>
@@ -11,6 +6,58 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div>TODO write content</div>
+        <div id="result"></div>
     </body>
+    <script>
+
+        var joc = {
+            mapa: [
+                fila[24] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[23] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[22] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[21] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[20] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[19] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[18] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[17] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[16] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[15] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[14] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[13] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[12] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[11] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[10] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[09] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[08] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[07] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[06] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[05] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[04] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[03] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[02] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[01] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                fila[00] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ],
+            estat: "",
+            puntuacio: 0,
+            puntMax: (localStorage.getItem("max" == undefined ? 0 : localStorage.getItem("max"))),
+
+            pecaV: {},
+            pecaS: {},
+            cont: [0, 0, 0, 0, 0, 0, 0],
+            intervalT: 0,
+            inicializar: function () {},
+            pecaSAleatoria: function () {},
+            interaccioTeclat: function () {},
+            movAuto: function () {}
+
+        };
+                /*function () {
+                /* *************PUNTUACIO MAX PER SESSIO**************** 
+                // Store
+                localStorage.setItem("max", puntMax);
+                // Retrieve
+                document.getElementById("result").innerHTML = localStorage.getItem("max");
+            }*/
+    </script>
 </html>
