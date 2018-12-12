@@ -7,8 +7,7 @@
     </head>
     <body>
         <div id="result"></div>
-        <div id="pintar"></div>
-        <div id="rotar"></div>
+        <div id="tetris"></div>
     </body>
     <script>
         //objecte joc
@@ -48,7 +47,27 @@
             pecaS: {},
             cont: [0, 0, 0, 0, 0, 0, 0],
             intervalT: 0,
-            inicializar: function () {},
+            inicializar: function () {
+                var resultat = "<table border='1'>";
+                for (var i = 0; i < this.mapa.length; i++)
+                {
+                    resultat = resultat + "<tr>";
+                    for (var j = 0; j < this.mapa[i].length; j++)
+                    {
+                        resultat = resultat + "<td>";
+                        if (this.mapa[i][j] == 1) {
+                            resultat = resultat + "X";
+                        } else {
+                            resultat = resultat + "&nbsp;&nbsp;&nbsp;";
+                        }
+                        ;
+                        resultat = resultat + "</td>";
+                    }
+                    resultat = resultat + "</tr>";
+                }
+                resultat = resultat + "</table>";
+                document.getElementById("tetris").innerHTML = resultat;
+            },
             pecaSAleatoria: function () {},
             interaccioTeclat: function () {},
             movAuto: function () {}
@@ -64,7 +83,7 @@
                 [[[0, 0, 0, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 0, 0]], "roig"],
                 [[[0, 1, 0, 0], [0, 1, 0, 0], [0, 1, 1, 0], [0, 0, 0, 0]], "blau"],
                 [[[0, 1, 1, 0], [0, 1, 0, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "taronga"],
-                [[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"]]
+                [[[0, 0, 0, 0], [1, 1, 1, 0], [0, 1, 0, 0], [0, 0, 0, 0]], "morat"]];
             var numeroAleatori = Math.round(Math.random() * 6);
             return peces[numeroAleatori];
         }
@@ -80,35 +99,26 @@
             this.y = y;
         };
         //LA PIEZA SE CREARIA ASÍ----> 
-        var p = new pieza(genPieza[0], genPieza[1], 0, 0);
-        console.log(p);
-        
+        var p = new pieza(genPieza[0], genPieza[1], 0, 3);
+        //console.log(p);
+
         //_________________________FUNCIONES DEL OBJETO PIEZA____________________________________________________
-        
+        //
         //__________________________FUNCION TEMPORAL PARA VER LA PIEZA EN PANTALLA
         pieza.prototype.pintar = function ()
         {
-            var resultat = "<table border='1'>";
             for (var i = 0; i < this.forma.length; i++)
             {
-                resultat = resultat + "<tr>"
                 for (var j = 0; j < this.forma[i].length; j++)
                 {
-                    resultat = resultat + "<td>";
                     if (this.forma[i][j] == 1) {
-                        resultat = resultat + "X"
-                    } else {
-                        resultat = resultat + "-"
+                        joc.mapa[(this.x + i)][(this.y + j)] = 1;
+                        joc.inicializar();
                     }
-                    ;
-                    resultat = resultat + "</td>";
                 }
-                resultat = resultat + "</tr>";
             }
-            resultat = resultat + "</table>";
-            return resultat
         };
-        
+
         //______________FUNCION PARA ROTAR A LA DERECHA_________________________
         pieza.prototype.rotarDreta = function () {
             var formaNova = new Array();
@@ -120,31 +130,39 @@
             }
             this.forma = formaNova;
         };
-        
+
         //___________FUNCION PARA MOVER A LA IZQUIERDA
         pieza.prototype.moureEsq = function () {
             if ((this.x - 1) > 0) {
                 this.x--;
-                return true;
-            } else {
-                return false;
             }
         };
-        
+
         //_____________FUNCION PARA MOVER A LA DERECHA
         pieza.prototype.moureDreta = function () {
             if ((this.x + 1) < 14) {
                 this.x++;
-                return true;
-            } else {
-                return false;
+            }
+        };
+
+        //____________FUNCION PARA MOVER LA PIEZA HACIA ABAJO
+        pieza.prototype.moureAvall = function () {
+            if ((this.y - 1) >= 0) {
+                //joc.mapa[(this.x)][(this.y)] = 0;
+                this.x++;
             }
         };
         
-        document.getElementById("pintar").innerHTML = p.pintar();
-        p.rotarDreta();
-        document.getElementById("rotar").innerHTML = p.pintar();
-
-
+        joc.inicializar();
+        p.pintar();
+        //p.moureDreta();
+        //p.pintar();
+        //document.getElementById("rotar").innerHTML = p.pintar();
+        
+        /*var a = setInterval(function () {
+            p.moureAvall();
+            p.pintar();
+        }
+        , 1000);*/
     </script>
 </html>
