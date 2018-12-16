@@ -6,8 +6,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
-        <div id="result"></div>
-        <div id="tetris"></div>
+        <div id="result">Puntuació: </div>
+        <div id="tetris" style="margin-left: 40%;"></div>
+        <div id="piezaActual" style="margin-left: 20%; margin-top: -30%;"></div>
+        <div id="piezaSig" style="margin-left:  70%; margin-top: -7.5%;"></div>
+
     </body>
     <script>
         //objecte joc
@@ -48,6 +51,12 @@
             cont: [0, 0, 0, 0, 0, 0, 0],
             intervalT: 0,
             inicializar: function () {
+                var piezaA = GeneraPecaAleatoria();
+                this.pecaV = new pieza(piezaA[0], piezaA[1], 0, 3);
+                piezaA = GeneraPecaAleatoria();
+                this.pecaS = new pieza(piezaA[0], piezaA[1], 0, 3);
+            },
+            pintarJoc: function () {
                 var resultat = "<table border='1'>";
                 for (var i = 0; i < this.mapa.length; i++)
                 {
@@ -57,10 +66,11 @@
                         resultat = resultat + "<td>";
                         if (this.mapa[i][j] == 1) {
                             resultat = resultat + "X";
+                        } else if (this.mapa[i][j] == 11) {
+                            resultat = resultat + "--";
                         } else {
                             resultat = resultat + "&nbsp;&nbsp;&nbsp;";
                         }
-                        ;
                         resultat = resultat + "</td>";
                     }
                     resultat = resultat + "</tr>";
@@ -68,9 +78,55 @@
                 resultat = resultat + "</table>";
                 document.getElementById("tetris").innerHTML = resultat;
             },
-            pecaSAleatoria: function () {},
             interaccioTeclat: function () {},
-            movAuto: function () {}
+            posicioCorrecta: function () {
+                for (var i = 0; i < this.pecaV.forma.length; i++) {
+                    for (var j = 0; j < this.pecaV.forma[i].length; j++) {
+                        if (this.pecaV.forma[i][j] != 0) {
+                            if (this.pecaV.x + i < 0 || this.pecaV.x + i > 24) {
+                                return false;
+                            }
+                            if (this.pecaV.y + j < 0 || this.pecaV.y + j > 9) {
+                                return false;
+                            }
+                            if (this.mapa[this.pecaV.x + i][this.pecaV.y + j] != 0) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+                return true;
+            },
+            movAuto: function () {
+                this.pecaV.moureAvall();
+
+                for (var i = this.mapa.length - 1; i >= 0; i--)
+                {
+                    for (var j = this.mapa[i].length - 1; j >= 0; j--)
+                    {
+                        if (this.mapa[i][j] === 1) {
+                            this.mapa[i][j] = 0;
+                        }
+                    }
+                }
+                if (!this.posicioCorrecta()) {
+                    this.pecaV.moureAdalt();
+                    this.pecaV.pintar();
+                    this.pecaV = this.pecaS;
+                    var piezaA = GeneraPecaAleatoria();
+                    this.pecaS = new pieza(piezaA[0], piezaA[1], 0, 3);
+                    //Para cambiar el valor de la pieza al llegar abajo
+                    for (var i = this.mapa.length - 1; i >= 0; i--) {
+                        for (var j = this.mapa[i].length - 1; j >= 0; j--) {
+                            if (this.mapa[i][j] === 1) {
+                                this.mapa[i][j] = 11;
+                            }
+                        }
+                    }
+                } else {
+                    this.pecaV.pintar();
+                }
+            }
 
         };
         //__________________FUNCION QUE GENERA UNA PIEZA ALEATORIA, DEVUELVE UN ARRAY CON LA FORMA Y EL COLOR
@@ -88,7 +144,7 @@
             return peces[numeroAleatori];
         }
         // GeneraPecaAleatoria() devuelve array de 2 posiciones, pos 1 -> forma, pos 2 -> color
-        var genPieza = GeneraPecaAleatoria();
+        //var genPieza = GeneraPecaAleatoria();
 
         //____________________________________Objeto pieza________________________________________________
         var pieza = function (forma, color, x, y)
@@ -99,12 +155,12 @@
             this.y = y;
         };
         //LA PIEZA SE CREARIA ASÍ----> 
-        var p = new pieza(genPieza[0], genPieza[1], 0, 3);
+        //var p = new pieza(genPieza[0], genPieza[1], 0, 3);
         //console.log(p);
 
         //_________________________FUNCIONES DEL OBJETO PIEZA____________________________________________________
         //
-        //__________________________FUNCION TEMPORAL PARA VER LA PIEZA EN PANTALLA
+        //__________________________FUNCION PARA VER LA PIEZA EN EL MAPA
         pieza.prototype.pintar = function ()
         {
             for (var i = 0; i < this.forma.length; i++)
@@ -113,10 +169,33 @@
                 {
                     if (this.forma[i][j] == 1) {
                         joc.mapa[(this.x + i)][(this.y + j)] = 1;
-                        joc.inicializar();
+                        //joc.inicializar();
                     }
                 }
             }
+        };
+        //__________________________FUNCION PARA VER LA PIEZA ACTUAL Y SIGUIENTE
+        pieza.prototype.pintarPeca = function ()
+        {
+            var resultat = "<table border='1'>";
+            for (var i = 0; i < this.forma.length; i++)
+            {
+                resultat = resultat + "<tr>";
+                for (var j = 0; j < this.forma[i].length; j++)
+                {
+                    resultat = resultat + "<td>";
+                    if (this.forma[i][j] == 1) {
+                        resultat = resultat + "X";
+                    } else {
+                        resultat = resultat + "-";
+                    }
+                    ;
+                    resultat = resultat + "</td>";
+                }
+                resultat = resultat + "</tr>";
+            }
+            resultat = resultat + "</table>";
+            return resultat;
         };
 
         //______________FUNCION PARA ROTAR A LA DERECHA_________________________
@@ -133,36 +212,44 @@
 
         //___________FUNCION PARA MOVER A LA IZQUIERDA
         pieza.prototype.moureEsq = function () {
-            if ((this.x - 1) > 0) {
-                this.x--;
+            if ((this.y - 1) > 0) {
+                this.y--;
             }
         };
 
         //_____________FUNCION PARA MOVER A LA DERECHA
         pieza.prototype.moureDreta = function () {
-            if ((this.x + 1) < 14) {
-                this.x++;
+            if ((this.y + 1) < 9) {
+                this.y++;
             }
         };
 
         //____________FUNCION PARA MOVER LA PIEZA HACIA ABAJO
         pieza.prototype.moureAvall = function () {
-            if ((this.y - 1) >= 0) {
-                //joc.mapa[(this.x)][(this.y)] = 0;
+            if ((this.x + 1) <= 25) {
                 this.x++;
             }
         };
-        
+        //____________FUNCION PARA MOVER LA PIEZA HACIA ARRIBA
+        pieza.prototype.moureAdalt = function () {
+            if ((this.x - 1) >= 0) {
+                this.x--;
+            }
+        };
+
         joc.inicializar();
-        p.pintar();
-        //p.moureDreta();
-        //p.pintar();
-        //document.getElementById("rotar").innerHTML = p.pintar();
-        
-        /*var a = setInterval(function () {
-            p.moureAvall();
-            p.pintar();
+        joc.pecaV.pintar();
+        joc.pintarJoc();
+
+        document.getElementById("piezaActual").innerHTML = joc.pecaV.pintarPeca();
+        document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
+
+        var a = setInterval(function () {
+            joc.pintarJoc();
+            joc.movAuto();
+            document.getElementById("piezaActual").innerHTML = "Peça Actual: " + joc.pecaV.pintarPeca();
+            document.getElementById("piezaSig").innerHTML = "Peça Següent: " + joc.pecaS.pintarPeca();
         }
-        , 1000);*/
+        , 500);
     </script>
 </html>
