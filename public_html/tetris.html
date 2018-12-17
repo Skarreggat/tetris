@@ -5,12 +5,20 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body id ="all">
-        <div id="result">Puntuació: </div>
-        <div id="tetris" style="margin-left: 30%; font-size: 30px; line-height: 1px;"></div>
-        <div id="piezaActual" style="margin-left: 70%; margin-top: -40%; font-family: Courier New; font-size: 20px;
+    <body id ="all" style="background-color: beige;">
+        <div id="tetris" style="margin-left: 35%; font-size: 30px; line-height: 1px;"></div>
+        <div id="result" style="margin-left: 15%; margin-top: -35%; font-family: Courier New;
+             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
+             width: 150px;"></div>
+        <div id="lvl" style="margin-left: 15%; margin-top: 5%; font-family: Courier New;
+             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
+             width: 150px;"></div>
+        <div id="resultMax" style="margin-left: 15%; margin-top: 5%; font-family: Courier New;
+             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
+             width: 150px;">Puntuació Màxima: </div>
+        <div id="piezaActual" style="margin-left: 60%; margin-top: -22%; font-family: Courier New; font-size: 20px;
              line-height: 1px;"></div>
-        <div id="piezaSig" style="margin-left:  70%; margin-top: 10.5%; font-family: Courier New; font-size: 20px;
+        <div id="piezaSig" style="margin-left:  60%; margin-top: 10.5%; font-family: Courier New; font-size: 20px;
              line-height: 1px;"></div>
 
     </body>
@@ -44,12 +52,13 @@
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
             ],
-            estat: "",
+            estat: 0,
             puntuacio: 0,
             puntMax: (localStorage.getItem("max" == undefined ? 0 : localStorage.getItem("max"))),
 
             pecaV: {},
             pecaS: {},
+            contPeces: 0,
             cont: [0, 0, 0, 0, 0, 0, 0],
             intervalT: 0,
             inicializar: function () {
@@ -66,11 +75,11 @@
                     for (var j = 0; j < this.mapa[i].length; j++)
                     {
                         if (this.mapa[i][j] == 1) {
-                            resultat = resultat + "<img src='verde.jpg' height='25px' width='25px'>";
+                            resultat = resultat + "<img src='verde.jpg' height='24px' width='25px'>";
                         } else if (this.mapa[i][j] == 11) {
-                            resultat = resultat + "<img src='gris.jpg' height='25px' width='25px'>";
+                            resultat = resultat + "<img src='gris.jpg' height='24px' width='25px'>";
                         } else {
-                            resultat = resultat + "<img src='azul.jpg' height='25px' width='25px'>";
+                            resultat = resultat + "<img src='azul.jpg' height='24px' width='25px'>";
                         }
                     }
                 }
@@ -160,6 +169,7 @@
                                 joc.pecaV.pintar();
                             } else {
                                 joc.pecaV.pintar();
+                                joc.puntuacio = joc.puntuacio + 1;
                             }
                             break;
                     }
@@ -188,7 +198,6 @@
             },
             movAuto: function () {
                 this.pecaV.moureAvall();
-
                 for (var i = this.mapa.length - 1; i >= 0; i--)
                 {
                     for (var j = this.mapa[i].length - 1; j >= 0; j--)
@@ -211,6 +220,11 @@
                                 this.mapa[i][j] = 11;
                             }
                         }
+                    }
+                    this.puntuacio = this.puntuacio + 10;
+                    this.contPeces++;
+                    if(this.contPeces % 10 == 0){
+                        this.estat = this.estat + 1;
                     }
                 } else {
                     this.pecaV.pintar();
@@ -344,12 +358,16 @@
 
         document.getElementById("piezaActual").innerHTML = joc.pecaV.pintarPeca();
         document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
+        document.getElementById("result").innerHTML = "Puntuació: " + joc.puntuacio;
+        document.getElementById("lvl").innerHTML = "Nivell: " + joc.estat;
 
         var a = setInterval(function () {
             joc.pintarJoc();
             joc.movAuto();
-            document.getElementById("piezaActual").innerHTML = "Peça Actual: " + joc.pecaV.pintarPeca();
-            document.getElementById("piezaSig").innerHTML = "Peça Següent: " + joc.pecaS.pintarPeca();
+            document.getElementById("piezaActual").innerHTML = joc.pecaV.pintarPeca();
+            document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
+            document.getElementById("result").innerHTML = "Puntuació: " + joc.puntuacio;
+            document.getElementById("lvl").innerHTML = "Nivell: " + joc.estat;
         }
         , 500);
     </script>
