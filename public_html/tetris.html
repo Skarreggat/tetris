@@ -7,9 +7,11 @@
     </head>
     <body id ="all">
         <div id="result">Puntuació: </div>
-        <div id="tetris" style="margin-left: 40%;"></div>
-        <div id="piezaActual" style="margin-left: 20%; margin-top: -30%;"></div>
-        <div id="piezaSig" style="margin-left:  70%; margin-top: -7.5%;"></div>
+        <div id="tetris" style="margin-left: 30%; font-size: 30px; line-height: 1px;"></div>
+        <div id="piezaActual" style="margin-left: 70%; margin-top: -40%; font-family: Courier New; font-size: 20px;
+             line-height: 1px;"></div>
+        <div id="piezaSig" style="margin-left:  70%; margin-top: 10.5%; font-family: Courier New; font-size: 20px;
+             line-height: 1px;"></div>
 
     </body>
     <script>
@@ -57,25 +59,21 @@
                 this.pecaS = new pieza(piezaA[0], piezaA[1], 0, 3);
             },
             pintarJoc: function () {
-                var resultat = "<table border='1'>";
+                var resultat = "";
                 for (var i = 0; i < this.mapa.length; i++)
                 {
-                    resultat = resultat + "<tr>";
+                    resultat += "<br>";
                     for (var j = 0; j < this.mapa[i].length; j++)
                     {
-                        resultat = resultat + "<td>";
                         if (this.mapa[i][j] == 1) {
-                            resultat = resultat + "X";
+                            resultat = resultat + "<img src='verde.jpg' height='25px' width='25px'>";
                         } else if (this.mapa[i][j] == 11) {
-                            resultat = resultat + "--";
+                            resultat = resultat + "<img src='gris.jpg' height='25px' width='25px'>";
                         } else {
-                            resultat = resultat + "&nbsp;&nbsp;&nbsp;";
+                            resultat = resultat + "<img src='azul.jpg' height='25px' width='25px'>";
                         }
-                        resultat = resultat + "</td>";
                     }
-                    resultat = resultat + "</tr>";
                 }
-                resultat = resultat + "</table>";
                 document.getElementById("tetris").innerHTML = resultat;
             },
             interaccioTeclat: function () {
@@ -129,10 +127,40 @@
                             }
                             break;
                         case 3:
-
+                            joc.pecaV.rotarDreta();
+                            for (var i = joc.mapa.length - 1; i >= 0; i--)
+                            {
+                                for (var j = joc.mapa[i].length - 1; j >= 0; j--)
+                                {
+                                    if (joc.mapa[i][j] === 1) {
+                                        joc.mapa[i][j] = 0;
+                                    }
+                                }
+                            }
+                            if (!joc.posicioCorrecta()) {
+                                joc.pecaV.rotarEsq();
+                                joc.pecaV.pintar();
+                            } else {
+                                joc.pecaV.pintar();
+                            }
                             break;
                         case 4:
-
+                            joc.pecaV.moureAvall();
+                            for (var i = joc.mapa.length - 1; i >= 0; i--)
+                            {
+                                for (var j = joc.mapa[i].length - 1; j >= 0; j--)
+                                {
+                                    if (joc.mapa[i][j] === 1) {
+                                        joc.mapa[i][j] = 0;
+                                    }
+                                }
+                            }
+                            if (!joc.posicioCorrecta()) {
+                                joc.pecaV.moureAdalt();
+                                joc.pecaV.pintar();
+                            } else {
+                                joc.pecaV.pintar();
+                            }
                             break;
                     }
                 }
@@ -230,7 +258,6 @@
                 {
                     if (this.forma[i][j] == 1) {
                         joc.mapa[(this.x + i)][(this.y + j)] = 1;
-                        //joc.inicializar();
                     }
                 }
             }
@@ -238,24 +265,19 @@
         //__________________________FUNCION PARA VER LA PIEZA ACTUAL Y SIGUIENTE
         pieza.prototype.pintarPeca = function ()
         {
-            var resultat = "<table border='1'>";
+            var resultat = "";
             for (var i = 0; i < this.forma.length; i++)
             {
-                resultat = resultat + "<tr>";
+                resultat += "<br>";
                 for (var j = 0; j < this.forma[i].length; j++)
                 {
-                    resultat = resultat + "<td>";
                     if (this.forma[i][j] == 1) {
-                        resultat = resultat + "X";
+                        resultat = resultat + "<img src='verde.jpg' height='25px' width='25px'>";
                     } else {
-                        resultat = resultat + "-";
+                        resultat = resultat + "<img src='azul.jpg' height='25px' width='25px'>";
                     }
-                    ;
-                    resultat = resultat + "</td>";
                 }
-                resultat = resultat + "</tr>";
             }
-            resultat = resultat + "</table>";
             return resultat;
         };
 
@@ -270,7 +292,24 @@
             }
             this.forma = formaNova;
         };
-
+        
+        //______________FUNCION PARA ROTAR A LA DERECHA_________________________
+        pieza.prototype.rotarDreta = function () {
+            var formaNova = new Array();
+            for (var i = 0; i < this.forma.length; i++) {
+                formaNova[i] = new Array();
+                for (var j = 0; j < this.forma[i].length; j++) {
+                    formaNova[i][j] = this.forma[this.forma[i].length - 1 - j][i];
+                }
+            }
+            this.forma = formaNova;
+        };
+        //______________FUNCION PARA ROTAR A LA IZQUIERDA_________________________
+        pieza.prototype.rotarEsq = function () {
+            joc.pecaV.rotarDreta();
+            joc.pecaV.rotarDreta();
+            joc.pecaV.rotarDreta();
+        };
         //___________FUNCION PARA MOVER A LA IZQUIERDA
         pieza.prototype.moureEsq = function () {
             if ((this.y - 1) > -2) {
@@ -312,6 +351,6 @@
             document.getElementById("piezaActual").innerHTML = "Peça Actual: " + joc.pecaV.pintarPeca();
             document.getElementById("piezaSig").innerHTML = "Peça Següent: " + joc.pecaS.pintarPeca();
         }
-        , 100);
+        , 500);
     </script>
 </html>
