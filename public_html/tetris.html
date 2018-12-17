@@ -5,7 +5,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
-    <body>
+    <body id ="all">
         <div id="result">Puntuació: </div>
         <div id="tetris" style="margin-left: 40%;"></div>
         <div id="piezaActual" style="margin-left: 20%; margin-top: -30%;"></div>
@@ -78,7 +78,68 @@
                 resultat = resultat + "</table>";
                 document.getElementById("tetris").innerHTML = resultat;
             },
-            interaccioTeclat: function () {},
+            interaccioTeclat: function () {
+                function notificaObservador(e) {
+                    var direccion = 0;
+                    if (e.code == "ArrowRight") {
+                        direccion = 1;
+                    } else if (e.code == "ArrowLeft") {
+                        direccion = 2;
+                    } else if (e.code == "ArrowUp") {
+                        direccion = 3;
+                    } else if (e.code == "ArrowDown") {
+                        direccion = 4;
+                    }
+
+                    switch (direccion) {
+                        case 1:
+                            joc.pecaV.moureDreta();
+                            for (var i = joc.mapa.length - 1; i >= 0; i--)
+                            {
+                                for (var j = joc.mapa[i].length - 1; j >= 0; j--)
+                                {
+                                    if (joc.mapa[i][j] === 1) {
+                                        joc.mapa[i][j] = 0;
+                                    }
+                                }
+                            }
+                            if (!joc.posicioCorrecta()) {
+                                joc.pecaV.moureEsq();
+                                joc.pecaV.pintar();
+                            } else {
+                                joc.pecaV.pintar();
+                            }
+                            break;
+                        case 2:
+                            joc.pecaV.moureEsq();
+                            for (var i = joc.mapa.length - 1; i >= 0; i--)
+                            {
+                                for (var j = joc.mapa[i].length - 1; j >= 0; j--)
+                                {
+                                    if (joc.mapa[i][j] === 1) {
+                                        joc.mapa[i][j] = 0;
+                                    }
+                                }
+                            }
+                            if (!joc.posicioCorrecta()) {
+                                joc.pecaV.moureDreta();
+                                joc.pecaV.pintar();
+                            } else {
+                                joc.pecaV.pintar();
+                            }
+                            break;
+                        case 3:
+
+                            break;
+                        case 4:
+
+                            break;
+                    }
+                }
+
+                var element = document.getElementById("all");
+                element.addEventListener("keydown", notificaObservador);
+            },
             posicioCorrecta: function () {
                 for (var i = 0; i < this.pecaV.forma.length; i++) {
                     for (var j = 0; j < this.pecaV.forma[i].length; j++) {
@@ -212,7 +273,7 @@
 
         //___________FUNCION PARA MOVER A LA IZQUIERDA
         pieza.prototype.moureEsq = function () {
-            if ((this.y - 1) > 0) {
+            if ((this.y - 1) > -2) {
                 this.y--;
             }
         };
@@ -240,6 +301,7 @@
         joc.inicializar();
         joc.pecaV.pintar();
         joc.pintarJoc();
+        joc.interaccioTeclat();
 
         document.getElementById("piezaActual").innerHTML = joc.pecaV.pintarPeca();
         document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
@@ -250,6 +312,6 @@
             document.getElementById("piezaActual").innerHTML = "Peça Actual: " + joc.pecaV.pintarPeca();
             document.getElementById("piezaSig").innerHTML = "Peça Següent: " + joc.pecaS.pintarPeca();
         }
-        , 500);
+        , 100);
     </script>
 </html>
