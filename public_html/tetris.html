@@ -76,22 +76,21 @@
                     {
                         if (this.mapa[i][j] == "G") {
                             resultat = resultat + "<img src='amarillo.jpg' height='24px' width='25px'>";
-                        }else if(this.mapa[i][j] == "V"){
+                        } else if (this.mapa[i][j] == "V") {
                             resultat = resultat + "<img src='verde.jpg' height='24px' width='25px'>";
-                        }else if(this.mapa[i][j] == "L"){
-                            resultat = resultat + "<img src='lila.jpg' height='24px' width='25px'>";                       
-                        }else if(this.mapa[i][j] == "R"){
-                            resultat = resultat + "<img src='rojo.jpg' height='24px' width='25px'>";                       
-                        }else if(this.mapa[i][j] == "B"){
-                            resultat = resultat + "<img src='azuul.jpg' height='24px' width='25px'>";                       
-                        }else if(this.mapa[i][j] == "T"){
-                            resultat = resultat + "<img src='naranja.jpg' height='24px' width='25px'>";                        
-                        }else if(this.mapa[i][j] == "M"){
-                            resultat = resultat + "<img src='morado.jpg' height='24px' width='25px'>";                        
-                        }
-                        else if (this.mapa[i][j] == 11) {
-                            resultat = resultat + "<img src='gris.jpg' height='24px' width='25px'>";                        
-                        }else {
+                        } else if (this.mapa[i][j] == "L") {
+                            resultat = resultat + "<img src='lila.jpg' height='24px' width='25px'>";
+                        } else if (this.mapa[i][j] == "R") {
+                            resultat = resultat + "<img src='rojo.jpg' height='24px' width='25px'>";
+                        } else if (this.mapa[i][j] == "B") {
+                            resultat = resultat + "<img src='azuul.jpg' height='24px' width='25px'>";
+                        } else if (this.mapa[i][j] == "T") {
+                            resultat = resultat + "<img src='naranja.jpg' height='24px' width='25px'>";
+                        } else if (this.mapa[i][j] == "M") {
+                            resultat = resultat + "<img src='morado.jpg' height='24px' width='25px'>";
+                        } else if (this.mapa[i][j] == 11) {
+                            resultat = resultat + "<img src='gris.jpg' height='24px' width='25px'>";
+                        } else {
                             resultat = resultat + "<img src='azul.jpg' height='24px' width='25px'>";
                         }
                     }
@@ -244,6 +243,7 @@
                     }
                     this.puntuacio = this.puntuacio + 10;
                     this.contPeces++;
+                    this.borrarFila();
                     if (this.contPeces % 10 == 0) {
                         this.estat = this.estat + 1;
                         this.puntuacio = this.puntuacio + 20;
@@ -263,14 +263,25 @@
                     this.pecaV.pintar();
                 }
             },
-            borrarFila: function(){
-                for (var i = 0; i < this.forma.length; i++) {
-                    for (var j = 0; j < this.forma[i].length; j++) {
-                        
+            borrarFila: function () {
+                for (var i = 0; i < this.mapa.length; i++) {
+                    var cont = 0;
+                    for (var j = 0; j < this.mapa[i].length; j++) {
+                        if (this.mapa[i][j] == 11) {
+                            cont++;
+                            if (cont == 10) {
+                                //si arriba aqui es que tota la linia d'abaix està plena
+                                //ara sobreescribim la linea d'abaix amb la que té adalt
+                                for (var k = i; k > 0; k--) {
+                                    for (var l = this.mapa[i].length - 1; l >= 0; l--) {
+                                        this.mapa[k][l] = this.mapa[k - 1][l];
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
-
         };
         //__________________FUNCION QUE GENERA UNA PIEZA ALEATORIA, DEVUELVE UN ARRAY CON LA FORMA Y EL COLOR
         function GeneraPecaAleatoria()
@@ -311,24 +322,19 @@
                 for (var j = 0; j < this.forma[i].length; j++)
                 {
                     if (this.forma[i][j] == 1) {
-                        if(this.color == "groc"){
+                        if (this.color == "groc") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "G";
-                        }else if(this.color == "lila"){
+                        } else if (this.color == "lila") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "L";
-                        }
-                        else if(this.color == "verd"){
+                        } else if (this.color == "verd") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "V";
-                        }
-                        else if(this.color == "roig"){
+                        } else if (this.color == "roig") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "R";
-                        }
-                        else if(this.color == "blau"){
+                        } else if (this.color == "blau") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "B";
-                        }
-                        else if(this.color == "taronja"){
+                        } else if (this.color == "taronja") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "T";
-                        }
-                        else if(this.color == "morat"){
+                        } else if (this.color == "morat") {
                             joc.mapa[(this.x + i)][(this.y + j)] = "M";
                         }
                     }
@@ -345,27 +351,22 @@
                 for (var j = 0; j < this.forma[i].length; j++)
                 {
                     if (this.forma[i][j] == 1) {
-                        if(this.color == "groc"){
+                        if (this.color == "groc") {
                             resultat = resultat + "<img src='amarillo.jpg' height='25px' width='25px'>";
-                        }else if(this.color == "lila"){
+                        } else if (this.color == "lila") {
                             resultat = resultat + "<img src='lila.jpg' height='25px' width='25px'>";
-                        }
-                        else if(this.color == "verd"){
+                        } else if (this.color == "verd") {
                             resultat = resultat + "<img src='verde.jpg' height='25px' width='25px'>";
-                        }
-                        else if(this.color == "roig"){
+                        } else if (this.color == "roig") {
                             resultat = resultat + "<img src='rojo.jpg' height='25px' width='25px'>";
-                        }
-                        else if(this.color == "blau"){
+                        } else if (this.color == "blau") {
                             resultat = resultat + "<img src='azuul.jpg' height='25px' width='25px'>";
-                        }
-                        else if(this.color == "taronja"){
+                        } else if (this.color == "taronja") {
                             resultat = resultat + "<img src='naranja.jpg' height='25px' width='25px'>";
-                        }
-                        else if(this.color == "morat"){
+                        } else if (this.color == "morat") {
                             resultat = resultat + "<img src='morado.jpg' height='25px' width='25px'>";
                         }
-                        
+
                     } else {
                         resultat = resultat + "<img src='azul.jpg' height='25px' width='25px'>";
                     }
