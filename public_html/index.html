@@ -4,22 +4,15 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
     </head>
-    <body id ="all" style="background-color: beige;">
-        <div id="tetris" style="margin-left: 35%; font-size: 30px; line-height: 1px;"></div>
-        <div id="result" style="margin-left: 15%; margin-top: -35%; font-family: Courier New;
-             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
-             width: 150px;"></div>
-        <div id="lvl" style="margin-left: 15%; margin-top: 5%; font-family: Courier New;
-             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
-             width: 150px;"></div>
-        <div id="resultMax" style="margin-left: 15%; margin-top: 5%; font-family: Courier New;
-             border-style: double; border-color: red; padding: 0.5rem; border-width: 0.5rem;
-             width: 150px;">Puntuació Màxima: </div>
-        <div id="piezaActual" style="margin-left: 60%; margin-top: -22%; font-family: Courier New; font-size: 20px;
-             line-height: 1px;"></div>
-        <div id="piezaSig" style="margin-left:  60%; margin-top: 10.5%; font-family: Courier New; font-size: 20px;
-             line-height: 1px;"></div>
+    <body id ="all">
+        <div id="tetris"></div>
+        <div id="result"></div>
+        <div id="lvl"></div>
+        <div id="resultMax"></div>
+        <div id="piezaActual"></div>
+        <div id="piezaSig"></div>
 
     </body>
     <script>
@@ -54,8 +47,7 @@
             ],
             estat: 1,
             puntuacio: 0,
-            puntMax: (localStorage.getItem("max" == undefined ? 0 : localStorage.getItem("max"))),
-
+            puntMax: 0,
             pecaV: {},
             pecaS: {},
             contPeces: 0,
@@ -215,6 +207,7 @@
             movAuto: function () {
                 //se mueve hacia abajo la pieza
                 this.pecaV.moureAvall();
+
                 //borra su posicion anterior
                 for (var i = this.mapa.length - 1; i >= 0; i--)
                 {
@@ -230,6 +223,15 @@
                     //volvemos la pieza hacia arriba y la pintamos ya que ya ha llegado a abajo o hay una pieza debajo
                     this.pecaV.moureAdalt();
                     this.pecaV.pintar();
+                    for (var j = 0; j < this.mapa[0].length; j++)
+                    {
+                        if (this.mapa[0][j] == 11) {
+                            //this.comprovacioPunt();
+                            clearInterval(a);
+                            alert("Has perdido");
+
+                        }
+                    }
                     this.pecaV = this.pecaS;
                     var piezaA = GeneraPecaAleatoria();
                     this.pecaS = new pieza(piezaA[0], piezaA[1], 0, 3);
@@ -256,6 +258,7 @@
                             document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
                             document.getElementById("result").innerHTML = "Puntuació: " + joc.puntuacio;
                             document.getElementById("lvl").innerHTML = "Nivell: " + joc.estat;
+                            document.getElementById("resultMax").innerHTML = "Puntuació Màxima:  " + joc.puntMax;
                         }
                         , this.intervalT);
                     }
@@ -280,6 +283,14 @@
                             }
                         }
                     }
+                }
+            }
+            ,
+            comprovacioPunt: function () {
+                if (this.puntuacio > this.puntMax) {
+                    localStorage.setItem("max", this.puntuacio);
+                    var maxim = localStorage("max");
+                    this.puntMax = maxim;
                 }
             }
         };
@@ -432,6 +443,7 @@
         document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
         document.getElementById("result").innerHTML = "Puntuació: " + joc.puntuacio;
         document.getElementById("lvl").innerHTML = "Nivell: " + joc.estat;
+        document.getElementById("resultMax").innerHTML = "Puntuació Màxima:  " + joc.puntMax;
 
         var a = setInterval(function () {
             joc.pintarJoc();
@@ -440,6 +452,7 @@
             document.getElementById("piezaSig").innerHTML = joc.pecaS.pintarPeca();
             document.getElementById("result").innerHTML = "Puntuació: " + joc.puntuacio;
             document.getElementById("lvl").innerHTML = "Nivell: " + joc.estat;
+            document.getElementById("resultMax").innerHTML = "Puntuació Màxima:  " + joc.puntMax;
         }
         , joc.intervalT);
     </script>

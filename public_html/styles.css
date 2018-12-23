@@ -1,0 +1,57 @@
+#all{
+    background-color: beige;
+}
+
+#tetris{
+    margin-left: 35%;
+    font-size: 30px;
+    line-height: 1px;
+}
+#result{
+    margin-left: 15%;
+    margin-top: -35%;
+    font-family: Courier New;
+    border-style: double;
+    border-color: red;
+    padding: 0.5rem;
+    border-width: 0.5rem;
+    width: 150px;
+}
+
+#lvl{
+    margin-left: 15%;
+    margin-top: 5%;
+    font-family: Courier New;
+    border-style: double;
+    border-color: red;
+    padding: 0.5rem;
+    border-width: 0.5rem;
+    width: 150px;
+}
+
+#resultMax{
+    margin-left: 15%;
+    margin-top: 5%;
+    font-family: Courier New;
+    border-style: double;
+    border-color: red;
+    padding: 0.5rem;
+    border-width: 0.5rem;
+    width: 150px;
+}
+
+#piezaActual{
+    margin-left: 60%;
+    margin-top: -22%;
+    font-family: Courier New;
+    font-size: 20px;
+    line-height: 1px;
+}
+
+#piezaSig{
+    margin-left:  60%;
+    margin-top: 10.5%;
+    font-family: Courier New;
+    font-size: 20px;
+    line-height: 1px;
+}
